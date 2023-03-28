@@ -10,6 +10,7 @@ const Cart = sequelize.define('Cart', {
     totalAmount: {
         type: DataTypes.DECIMAL(10, 2),
         allowNull: false,
+        defaultValue: 0
     }
 })
 

@@ -27,3 +27,5 @@ const Coupon = sequelize.define("Coupon", {
     allowNull: false,
   },
 });
+
+module.exports = Coupon

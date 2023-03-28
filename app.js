@@ -22,7 +22,7 @@ app.use(express.json())
 app.use(cors())
 app.use(helmet())
 app.use(xss())
-app.use(morgan(dev))
+app.use(morgan('dev'))
 
 
 app.get('/', (req, res, next) => {

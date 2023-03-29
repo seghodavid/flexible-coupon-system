@@ -19,14 +19,15 @@ class couponService {
     return coupon;
   }
 
-  static async applyCoupon(couponCode) {
+  static async applyCoupon(couponCode, cartId) {
     const coupon = await Coupon.findOne({ where: { code: couponCode } });
     if (!coupon) {
       throw new Error("Invalid coupon code");
     }
 
+
     const cart = await Cart.findOne({
-      where: { Id: 3 },
+      where: { Id: cartId },
       include: [CartItem],
     });
 
@@ -53,9 +54,10 @@ class couponService {
       const fixedDiscount = cart.totalAmount - coupon.discountAmount;
       discountAmount = Math.max(percentDiscount, fixedDiscount);
     } else if (coupon.type === "rejected") {
-      const fixedAmount = cart.totalAmount - 10.0;
+      const fixedAmount = 10.0;
       const percentOff = (10 / 100) * cart.totalAmount;
-      discountAmount = fixedAmount + percentOff;
+      console.log(fixedAmount, percentOff)
+      discountAmount = 10 + percentOff;
       adjustedPrice = cart.totalAmount - discountAmount;
     }
 

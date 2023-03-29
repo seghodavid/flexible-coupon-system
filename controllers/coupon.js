@@ -34,8 +34,8 @@ const getCoupon = async (req, res, next) => {
 
 const applyCoupon = async (req, res, next) => {
     try {
-        const {code} = req.body
-        const coupon = await couponService.applyCoupon(code)
+        const {code, cartId} = req.body
+        const coupon = await couponService.applyCoupon(code, cartId)
 
          res.status(StatusCodes.OK).json({
            status: "success",

@@ -6,7 +6,7 @@ const router = express.Router()
 
 
 router.route('/createCoupon').post(createCoupon)
-router.use(checkCoupon).route('/').get(getCoupon).post(applyCoupon)
+router.route('/').get(getCoupon).post(applyCoupon)
 
 
 module.exports = router;

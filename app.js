@@ -6,7 +6,10 @@ const helmet = require("helmet")
 const xss = require("xss-clean");
 const rateLimiter = require("express-rate-limit");
 
+const cartRouter = require("./routes/cart")
 
+const errorHandlerMiddleware = require("./middleware/error-handler")
+const notFoundMiddleware = require("./middleware/not-found")
 
 dotenv.config()
 const app = express()
@@ -28,6 +31,13 @@ app.use(morgan('dev'))
 app.get('/', (req, res, next) => {
     res.send("<h1>Welcome to the Scello Assessment homepage</h1>")
 })
+
+//Routes
+app.use('/api/v1/cart', cartRouter)
+
+// Error handling middlewares
+app.use(notFoundMiddleware);
+app.use(errorHandlerMiddleware);
 
 const PORT= process.env.PORT || 5001
 

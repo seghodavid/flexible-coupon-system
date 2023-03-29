@@ -6,7 +6,8 @@ const password = process.env.DATABASE_PASSWORD
 
 const sequelize = new Sequelize(database, username, password, {
   host: process.env.DATABASE_HOST,
-  dialect: 'mysql'
+  dialect: "mysql",
+  logging: false,
 });
 
 const testDBConnection = async () => {

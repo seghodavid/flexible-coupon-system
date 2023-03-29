@@ -1,6 +1,7 @@
 const { Cart, CartItem } = require("../models");
+const { BadRequestError } = require("../errors")
 
-class CartService {
+class cartService {
   static async createCart() {
     const cart = await Cart.create();
     return cart;
@@ -10,7 +11,7 @@ class CartService {
     const cart = await Cart.findOne({ where: { id: cartId }, include: [CartItem] });
 
     if (!cart) {
-      throw new Error(`Cart with id ${cartId} not found`);
+      throw new BadRequestError(`Cart with id ${cartId} not found`);
     }
 
      const totalPrice = cart.CartItems.reduce(
@@ -25,10 +26,16 @@ class CartService {
     return {cart, totalPrice};
   }
 
+  static async getAllCart() {
+    const cart = await Cart.findAll({include: [CartItem]})
+
+    return {cart}
+  }
+
   static async createCartItem(cartId, itemName, price) {
     const cart = await Cart.findByPk(cartId)
 
-    if(!cart) throw new Error('Cart does not exist')
+    if(!cart) throw new BadRequestError("Cart does not exist");
 
     const cartItem = await CartItem.create({
         cartId, itemName, price
@@ -38,26 +45,14 @@ class CartService {
   }
 
   static async addItemToCart(cartId, itemId) {
-    // const cart = await Cart.findByPk(cartId);
-
-    // if (!cart) throw new Error(`Cart ${cartId} was not found`);
-
-    // const cartItem = await CartItem.findByPk(itemId) 
-
-    // if(!cartItem) throw new Error(`Item with id ${itemId} was not found`)
-
-    // await cart.addItem(cartItem)
-
-    // return this.getCart(cartId)
-
     const cart = await Cart.findByPk(cartId);
     if (!cart) {
-      throw new Error("Cart not found");
+      throw new BadRequestError("Cart not found");
     }
 
     const cartItem = await CartItem.findOne({ where: { id: itemId, cartId } });
     if (cartItem) {
-    //   cartItem.quantity += 1;
+      cartItem.quantity += 1;
       await cartItem.save();
     } else {
       await CartItem.create({ itemId, cartId});
@@ -68,4 +63,4 @@ class CartService {
 }
 
 
-module.exports = CartService
+module.exports = cartService

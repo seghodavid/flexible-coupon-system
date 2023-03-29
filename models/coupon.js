@@ -10,6 +10,7 @@ const Coupon = sequelize.define("Coupon", {
   code: {
     type: DataTypes.STRING,
     allowNull: false,
+    unique: true,
   },
   type: {
     type: DataTypes.ENUM("fixed", "mixed", "percent", "rejected"),
@@ -17,6 +18,7 @@ const Coupon = sequelize.define("Coupon", {
   discountAmount: {
     type: DataTypes.DECIMAL(10, 2),
     allowNull: false,
+    defaultValue: 0
   },
   minimumCartValue: {
     type: DataTypes.DECIMAL(10, 2),

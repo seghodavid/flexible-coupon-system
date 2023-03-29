@@ -7,6 +7,7 @@ const xss = require("xss-clean");
 const rateLimiter = require("express-rate-limit");
 
 const cartRouter = require("./routes/cart")
+const couponRouter = require("./routes/coupon")
 
 const errorHandlerMiddleware = require("./middleware/error-handler")
 const notFoundMiddleware = require("./middleware/not-found")
@@ -34,6 +35,7 @@ app.get('/', (req, res, next) => {
 
 //Routes
 app.use('/api/v1/cart', cartRouter)
+app.use('/api/v1/coupon', couponRouter)
 
 // Error handling middlewares
 app.use(notFoundMiddleware);

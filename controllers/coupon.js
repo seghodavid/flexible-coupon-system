@@ -1,10 +1,10 @@
-const couponService = require('../services/coupon')
+const CouponService = require('../services/coupon')
 const { StatusCodes } = require("http-status-codes");
 
 const createCoupon = async (req,res,next) => {
     try {
         const {code, type, minimumCartValue, minimumCartItem } = req.body
-        const coupon = await couponService.createCoupon(code,type,minimumCartValue,minimumCartItem)
+        const coupon = await CouponService.createCoupon(code,type,minimumCartValue,minimumCartItem)
 
         res.status(StatusCodes.CREATED).json({
           status: "success",
@@ -19,7 +19,7 @@ const createCoupon = async (req,res,next) => {
 
 const getCoupon = async (req, res, next) => {
     try {
-        const coupon = await couponService.getCoupon()
+        const coupon = await CouponService.getCoupon()
 
         res.status(StatusCodes.OK).json({
           status: "success",
@@ -35,7 +35,7 @@ const getCoupon = async (req, res, next) => {
 const applyCoupon = async (req, res, next) => {
     try {
         const {code, cartId} = req.body
-        const coupon = await couponService.applyCoupon(code, cartId)
+        const coupon = await CouponService.applyCoupon(code, cartId)
 
          res.status(StatusCodes.OK).json({
            status: "success",

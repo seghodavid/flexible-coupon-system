@@ -1,7 +1,7 @@
 const { Cart, CartItem, Coupon } = require("../models");
 const { BadRequestError } = require("../errors")
 
-class couponService {
+class CouponService {
   static async createCoupon(code, type, minimumCartValue, minimumCartItems) {
     const coupon = await Coupon.create({
       code,
@@ -68,4 +68,4 @@ class couponService {
   }
 }
 
-module.exports = couponService;
+module.exports = CouponService;

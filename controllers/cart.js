@@ -1,10 +1,10 @@
-const cartService = require('../services/cart')
+const CartService = require('../services/cart')
 const {StatusCodes} = require("http-status-codes")
 
 
 const createCart = async(req, res, next) => {
     try{
-        const cart = await cartService.createCart()
+        const cart = await CartService.createCart()
 
         res.status(StatusCodes.CREATED).json({
             "status": "success",
@@ -21,7 +21,7 @@ const createCartItems = async (req,res,next) => {
     try{
         const { cartId } = req.params;
         const { itemName, price } = req.body;
-        const cartItem = await cartService.createCartItem(
+        const cartItem = await CartService.createCartItem(
           cartId,
           itemName,
           price
@@ -41,7 +41,7 @@ const createCartItems = async (req,res,next) => {
 const addItemToCart = async (req,res,next) => {
     try {
         const { cartId, itemId } = req.params
-        const addedItem = await cartService.addItemToCart(cartId, itemId)
+        const addedItem = await CartService.addItemToCart(cartId, itemId)
 
         res.status(StatusCodes.OK).json({
           status: "success",
@@ -58,7 +58,7 @@ const getCart = async (req,res,next) => {
     try {
         const {cartId } = req.params
 
-        const cart = await cartService.getCart(cartId)
+        const cart = await CartService.getCart(cartId)
 
          res.status(StatusCodes.OK).json({
            status: "success",
@@ -73,7 +73,7 @@ const getCart = async (req,res,next) => {
 
 const getAllCart = async (req,res,next) => {
     try {
-        const cart = await cartService.getAllCart()
+        const cart = await CartService.getAllCart()
 
          res.status(StatusCodes.OK).json({
            status: "success",

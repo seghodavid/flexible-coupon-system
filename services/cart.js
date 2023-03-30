@@ -1,7 +1,7 @@
 const { Cart, CartItem } = require("../models");
 const { BadRequestError } = require("../errors")
 
-class cartService {
+class CartService {
   static async createCart() {
     const cart = await Cart.create();
     return cart;
@@ -63,4 +63,4 @@ class cartService {
 }
 
 
-module.exports = cartService
+module.exports = CartService

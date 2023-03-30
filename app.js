@@ -30,7 +30,9 @@ app.use(morgan('dev'))
 
 
 app.get('/', (req, res, next) => {
-    res.send("<h1>Welcome to the Scello Assessment homepage</h1>")
+    res.send(
+      "<h1>Welcome to the Scello Assessment homepage</h1><a href='https://documenter.getpostman.com/view/17168240/2s93RTRCu4'>Documentation</a>"
+    );
 })
 
 //Routes

@@ -1,5 +1,5 @@
 const { Cart, CartItem, Coupon } = require("../models");
-const cartService = require("./cart");
+const { BadRequestError } = require("../errors")
 
 class couponService {
   static async createCoupon(code, type, minimumCartValue, minimumCartItems) {
@@ -22,9 +22,8 @@ class couponService {
   static async applyCoupon(couponCode, cartId) {
     const coupon = await Coupon.findOne({ where: { code: couponCode } });
     if (!coupon) {
-      throw new Error("Invalid coupon code");
+      throw new BadRequestError(`The coupon code ${couponCode} is invalid or expired`);
     }
-
 
     const cart = await Cart.findOne({
       where: { Id: cartId },
@@ -32,33 +31,35 @@ class couponService {
     });
 
     if (
-      cart.totalAmount <= coupon.minimumCartValue ||
+      Number(cart.totalAmount) <= coupon.minimumCartValue ||
       cart.CartItems.length < coupon.minimumCartItems
     ) {
-      throw new Error(
+      throw new BadRequestError(
         `Coupon code requires you spend minimum ${coupon.minimumCartValue} or purchase at least ${coupon.minimumCartItems} items`
       );
     }
 
-    let adjustedPrice = cart.totalAmount;
-    let discountAmount = 0;
+    let totalAmount = Number(cart.totalAmount);
+    let adjustedPrice = totalAmount;
+    let discountAmount = Number(coupon.discountAmount);
 
     if (coupon.type === "percent") {
-      discountAmount = cart.totalAmount * (coupon.discountAmount / 100);
-      adjustedPrice = cart.totalAmount - discountAmount;
+      discountAmount = totalAmount * ( discountAmount/ 100);
+      adjustedPrice -= discountAmount;
     } else if (coupon.type === "fixed") {
-      discountAmount = coupon.discountAmount;
-      adjustedPrice = cart.totalAmount - discountAmount;
+      discountAmount;
+      adjustedPrice -= discountAmount;
     } else if (coupon.type === "mixed") {
-      const percentDiscount = (coupon.discountAmount / 100) * cart.totalAmount;
-      const fixedDiscount = cart.totalAmount - coupon.discountAmount;
+      const percentDiscount = (discountAmount / 100) * totalAmount;
+      const fixedDiscount = discountAmount;
       discountAmount = Math.max(percentDiscount, fixedDiscount);
+      console.log(discountAmount)
+      adjustedPrice -= discountAmount;
     } else if (coupon.type === "rejected") {
-      const fixedAmount = 10.0;
-      const percentOff = (10 / 100) * cart.totalAmount;
-      console.log(fixedAmount, percentOff)
-      discountAmount = 10 + percentOff;
-      adjustedPrice = cart.totalAmount - discountAmount;
+      const fixedAmount = discountAmount;
+      const percentOff = (discountAmount / 100) * totalAmount;
+      discountAmount = fixedAmount + percentOff;
+      adjustedPrice -= discountAmount;
     }
 
     coupon.discountAmount = discountAmount;

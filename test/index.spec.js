@@ -16,7 +16,7 @@ describe("GET /", function () {
   it("should return Welcome to the Scello Assessment homepage", function() {
     request
       .get("/")
-      .expect('"<h1>Welcome to the Scello Assessment homepage</h1>"')
+      .expect(`"<h1>Welcome to the Scello Assessment homepage</h1><a href='https://documenter.getpostman.com/view/17168240/2s93RTRCu4'>Documentation</a>"`)
       
   });
 
